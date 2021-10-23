@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"ambassador/src/database"
+	"ambassador/src/middlewares"
 	"ambassador/src/models"
 	"strconv"
 	"time"
@@ -94,17 +95,11 @@ func Login(c *fiber.Ctx) error {
 }
 
 func User(c *fiber.Ctx) error {
-	cookie := c.Cookies("jwt")
-
-	token, _ := jwt.ParseWithClaims(cookie, &jwt.StandardClaims{}, func(t *jwt.Token) (interface{}, error) {
-		return []byte("secret"), nil
-	})
-
-	payload := token.Claims.(*jwt.StandardClaims)
+	id, _ := middlewares.GetUserId(c)
 
 	var user models.User
 
-	database.DB.Where("id = ?", payload.Subject).First(&user)
+	database.DB.Where("id = ?", id).First(&user)
 
 	return c.JSON(user)
 
