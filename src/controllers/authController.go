@@ -50,7 +50,7 @@ func Login(c *fiber.Ctx) error {
 
 	database.DB.Where("Email = ?", data["email"]).First(&user)
 
-	if user.ID == 0 {
+	if user.Id == 0 {
 		c.Status(fiber.StatusBadRequest)
 		return c.JSON(fiber.Map{
 			"message": "Invalid credentials.",
@@ -65,7 +65,7 @@ func Login(c *fiber.Ctx) error {
 	}
 
 	payload := jwt.StandardClaims{
-		Subject:   strconv.Itoa(int(user.ID)),
+		Subject:   strconv.Itoa(int(user.Id)),
 		ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
 	}
 
@@ -129,11 +129,12 @@ func UpdateInfo(c *fiber.Ctx) error {
 	id, _ := middlewares.GetUserId(c)
 
 	user := models.User{
-		ID:        id,
 		FirstName: data["first_name"],
 		LastName:  data["last_name"],
 		Email:     data["email"],
 	}
+
+	user.Id = id
 
 	database.DB.Model(&user).Updates(&user)
 
@@ -157,9 +158,9 @@ func UpdatePassword(c *fiber.Ctx) error {
 
 	id, _ := middlewares.GetUserId(c)
 
-	user := models.User{
-		ID: id,
-	}
+	user := models.User{}
+
+	user.Id = id
 
 	user.SetPassword(data["password"])
 
