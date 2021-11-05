@@ -15,5 +15,5 @@
 # vendor/
 
 /.dbdata
-/tmp
+tmp/
 .dockerignore
