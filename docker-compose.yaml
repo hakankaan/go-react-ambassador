@@ -8,6 +8,7 @@ services:
             - .:/app
         depends_on:
             - db
+            - redis
 
     db:
         image: mysql:5.7.22
@@ -22,3 +23,8 @@ services:
             - .dbdata:/var/lib/mysql
         ports:
             - 33066:3306 # Prevents to conflict with mysql installed on my computer
+
+    redis:
+        image: redis:latest
+        ports:
+            - 6379:6379

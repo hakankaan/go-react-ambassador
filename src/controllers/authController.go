@@ -82,7 +82,6 @@ func Login(c *fiber.Ctx) error {
 
 	token, err := middlewares.GenerateJWT(user.Id, scope)
 
-
 	if err != nil {
 		c.Status(fiber.StatusBadRequest)
 		return c.JSON(fiber.Map{
@@ -111,6 +110,12 @@ func User(c *fiber.Ctx) error {
 	var user models.User
 
 	database.DB.Where("id = ?", id).First(&user)
+
+	if strings.Contains(c.Path(), "api/ambassador") {
+		ambassador := models.Ambassador(user)
+		ambassador.CalculateRevenue(database.DB)
+		return c.JSON(ambassador)
+	}
 
 	return c.JSON(user)
 
