@@ -12,7 +12,7 @@ type User struct {
 	Email        string   `json:"email" gorm:"unique"`
 	Password     []byte   `json:"-"`
 	IsAmbassador bool     `json:"-"`
-	Revenue      *float64 `json:"revenue, omitempty" gorm:"-"`
+	Revenue      *float64 `json:"revenue,omitempty" gorm:"-"`
 }
 
 func (user *User) SetPassword(password string) {
