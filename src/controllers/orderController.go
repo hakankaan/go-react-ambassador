@@ -98,9 +98,8 @@ func CreateOrder(c *fiber.Ctx) error {
 				"message": err.Error(),
 			})
 		}
-
-		tx.Commit()
 	}
+	tx.Commit()
 
 	return c.JSON(order)
 }
